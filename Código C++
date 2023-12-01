@@ -1,0 +1,37 @@
+#include <Servo.h>
+
+// Criando as variáveis dos pinos de entradas no arduino
+
+const int pirPin = 7;   // Sensor de presença
+const int ledPin = 11;   // Led
+const int buzzerPin = 8; // Buzzer
+const int servoPin = 5;  // Servo motor
+
+Servo meuServo;
+
+void setup() {
+  pinMode(pirPin, INPUT);
+  pinMode(ledPin, OUTPUT);
+  pinMode(buzzerPin, OUTPUT);
+
+  meuServo.attach(servoPin);
+  meuServo.write(90); // Posição inicial do servo
+}
+
+void loop() {
+  int pirStatus = digitalRead(pirPin);
+
+  if (pirStatus == HIGH) {
+
+    digitalWrite(ledPin, HIGH);  // Acende o LED verde
+    tone(buzzerPin, 900);        // Ativa o buzzer
+    delay(600);                   // Aguarda 0,6 segundos
+    noTone(buzzerPin);            // Desativa o buzzer
+    meuServo.write(180);          // Gira o servo motor para 180 graus
+    delay(1000);                  // Aguarda 1 segundo
+  } else {
+    // Nenhum objeto detectado
+    digitalWrite(ledPin, LOW);   // Deixa o led apagado
+    meuServo.write(90);           // Retorna o servo motor para a posição inicial
+  }
+}
